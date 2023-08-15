@@ -4,7 +4,6 @@
 //     console.log("Operação concluída!");
 //     return "Valor de retorno!";
 // };
-
 // async function main() {
 //     console.log("Iniciando função...");
 //     let resultado = await operacaoDemorada();
@@ -13,21 +12,38 @@
 
 // main()
 
-async function getCharacter(){
+async function renderCards(){
+    let data = await fetch("https://rickandmortyapi.com/api/character")
+    .then((resposta) => resposta.json())
+    .then((resposta) => resposta.results)
+    .catch(err => console.log(err))
+    let ul = document.getElementsByTagName('ul');
 
-    try {
-        let listaPersonagens = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151",{
-            body: JSON.stringify({
-                user: "kskakksa",
-                senha: "jsjsjsjs"
-            })
-        })
-        .then((resposta) => resposta.json())
-        .then((resposta) => console.log(resposta))
-    } catch (error) {
-        console.log(error);   
-    }
+    data.forEach(person => {
+        let li = document.createElement("li");
+        let img = document.createElement("img");
+        let spanName = document.createElement("Span");
+        
+        let div = document.createElement("div");
+        let spanIsAlive = document.createElement("span")
+        let small = document.createElement("small")
 
+        img.src = person.image;
+        img.alt = person.name;
+        spanName.innerText = person.name;
+        if(person.status === "Alive"){
+            div.classList.add("is-alive");
+            small.innerText = "Vivo";
+        }else{
+            div.classList.add("is-dead");
+            small.innerText = "Morto";
+        }
+
+        div.append(spanIsAlive, small);
+        li.append(img, spanName, div);
+
+        ul[0].appendChild(li);        
+    });
 }
 
-getCharacter();
+renderCards()
